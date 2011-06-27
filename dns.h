@@ -1,17 +1,3 @@
-/*
-  **
-  ** dproxy.h
-  **
-  ** Part of the drpoxy package by Matthew Pratt.
-  **
-  ** Copyright 1999 Matthew Pratt <mattpratt@yahoo.com>
-  **
-  ** This software is licensed under the terms of the GNU General
-  ** Public License (GPL). Please see the file COPYING for details.
-  **
-  **
-*/
-
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>

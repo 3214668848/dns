@@ -1,9 +1,8 @@
 #include "dns.h"
 int dns_is_query(struct udp_packet *udp_pkt){
-	return (!((udp_pkt->dns_hdr.dns_flags&0x80)/0x80));
+	return (!((udp_pkt->dns_hdr.dns_flags&0x8000)/0x8000));
 }
-void decode_domain_name(char query[BUF_SIZE])
-{
+void decode_domain_name(char* query){
     char temp[BUF_SIZE];
     int i,k,len,j;
     i=0;k=0;
@@ -18,9 +17,9 @@ void decode_domain_name(char query[BUF_SIZE])
     strcpy(query,temp);
 }
 int decode(struct udp_packet *udp_pkt,char* host,char* ip){
-	int ret=dns_is_query(&udp_pkt);
-	char query_string[BUF_SIZE];
-	strcpy(query_string, pkt.buf);
+	int ret=dns_is_query(udp_pkt);
+	char* query_string=(char*)malloc(BUF_SIZE*sizeof(char));
+	strcpy(query_string,udp_pkt->buf);
     decode_domain_name(query_string);
     printf("query: %s\n",query_string);
 	int l=strlen(query_string);
@@ -29,9 +28,9 @@ int decode(struct udp_packet *udp_pkt,char* host,char* ip){
 	ip=0;
 	if(!ret){
 		struct in_addr myip;
-		memcpy(&myip,udp_pkt->dns_hdr+sizeof(struct dns_answer)+l,sizeof(struct in_addr));
+		memcpy((void*)&myip,(void*)&udp_pkt->dns_hdr+(sizeof(struct dns_answer)+l),sizeof(struct in_addr));
 		memset(query_string,0,sizeof(query_string));
-		query_string=inet_ntoa(ip);
+		query_string=inet_ntoa(myip);
 		ip=(char*)malloc(strlen(query_string));
 		memcpy(ip,query_string,strlen(query_string));
 		printf("ip: %s\n",ip);
@@ -54,17 +53,19 @@ int dns_set_flags(int err,struct udp_packet *udp_pkt){
 void code(struct udp_packet *udp_pkt,int mark,char* ip){
 	struct in_addr myip;
 	inet_aton(ip,&myip);
+	//inet_aton("1.1.1.1",&udp_pkt->src_ip);
 	if(mark){
+		
 	}else{
+		struct dns_answer dns_ans;
 		dns_set_flags(0,udp_pkt); 
-    	pkt->dns_hdr.dns_no_answers=htons(1);
+    	udp_pkt->dns_hdr.dns_no_answers=htons(1);
     	dns_ans.dns_name=htons(0xc00c);
     	dns_ans.dns_type=htons(1);
     	dns_ans.dns_class=htons(1);
     	dns_ans.dns_time_to_live=htons(60);
     	dns_ans.dns_data_len=htons(4);
-    	packet_append(pkt,&dns_ans,sizeof(dns_ans));
-    	packet_append(pkt,&ip,sizeof(ip));
+    	packet_append(udp_pkt,&dns_ans,sizeof(dns_ans));
+    	packet_append(udp_pkt,&ip,sizeof(ip));
 	}
 }
-

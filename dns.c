@@ -104,11 +104,13 @@ int udp_packet_read(int sockfd, struct udp_packet *udp_pkt)
 }
 int dns_is_query(struct udp_packet *udp_pkt)
 {
-    return (!((udp_pkt->buf[ strlen(udp_pkt->buf) +2 ] & 0x80)/0x80));
+//    return (!((udp_pkt->buf[ strlen(udp_pkt->buf) +2 ] & 0x80)/0x80));
+ 	return (!((udp_pkt->dns_hdr.dns_flags & 0x80)/0x80));
 }
 int dns_get_opcode(struct udp_packet *udp_pkt)
 {
-    return (((udp_pkt->buf[ strlen(udp_pkt->buf) +2 ]) & 0x78)/8);
+//    return (((udp_pkt->buf[ strlen(udp_pkt->buf) +2 ]) & 0x78)/8);
+	 return ((udp_pkt->dns_hdr.dns_flags & 0x78)/8);
 }
 int dns_set_flags(int err, struct udp_packet *udp_pkt)
 {

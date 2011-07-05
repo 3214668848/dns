@@ -18,10 +18,8 @@ void dns_query_package(struct udp_packet *udp_pkt,char* host,short int id){
 		id=rand()%32766+1;
 	}
 	memset(udp_pkt,0,sizeof(struct udp_packet));
-	printf("%s\n",host);
 	char name[BUF_SIZE];
 	encode_domain_name(host,name);
-	printf("%d %s\n",strlen(name),name);
 	struct dns_header head;
 	head.dns_id=htons(id);
 	head.dns_flags=htons(0x0100);
@@ -37,11 +35,9 @@ void dns_query_package(struct udp_packet *udp_pkt,char* host,short int id){
 	}temp;
 	temp.type=htons(1);
 	temp.class=htons(1);
-	memcpy((void*)&udp_pkt->dns_hdr+(sizeof(struct dns_header)+strlen(name)),(void*)&temp,4);
-	int tt=(sizeof(struct dns_header)+strlen(name)+4);
-	printf("here\n");
+	memcpy((void*)&udp_pkt->dns_hdr+(sizeof(struct dns_header)+strlen(name)+1),(void*)&temp,sizeof(temp));
+	int tt=(sizeof(struct dns_header)+strlen(name)+sizeof(temp)+1);
 	udp_pkt->len=tt;
 	udp_pkt->src_port=PORT;
-	printf("end\n");
 	//inet_aton("1.1.1.1",&udp_pkt->src_ip);
 }

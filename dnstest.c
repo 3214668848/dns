@@ -18,9 +18,8 @@ int main(){
     }
 	printf("bind success\n");
 	struct udp_packet *p=(struct udp_packet *)malloc(sizeof(struct udp_packet));
-	dns_query_package(p,"baidu.com\0",0);
-	printf("here\n");
-   	int ret=sendto(sk,&p->dns_hdr,sizeof(struct udp_packet),0,(struct sockaddr*)&dns_serv,sizeof(addr));
+	dns_query_package(p,"google.com\0",0);
+   	int ret=sendto(sk,&p->dns_hdr,p->len,0,(struct sockaddr*)&dns_serv,sizeof(addr));
 	printf("send %d\n",ret);
 	int size=sizeof(addr);
 	int recv_len=recvfrom(sk,&p->dns_hdr,sizeof(struct udp_packet),0,(struct sockaddr*)&addr,&size);

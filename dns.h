@@ -17,7 +17,6 @@
 
 #ifndef PORT
 #define PORT 53
-#endif
 
 #define BUF_SIZE 2048
 
@@ -44,4 +43,4 @@ struct udp_packet{
   struct in_addr src_ip;
   int src_port;
 };
-
+#endif

@@ -24,15 +24,15 @@ int decode(struct udp_packet *udp_pkt,char* host,char* ip){
     printf("query: %s\n",query_string);
 	int l=strlen(query_string);
 	host=(char*)malloc(l*sizeof(char));
-	memcpy(host,query_string,l);
+	memcpy(host,query_string,l*sizeof(char));
 	ip=0;
 	if(!ret){
 		struct in_addr myip;
-		memcpy((void*)&myip,(void*)&udp_pkt->dns_hdr+(sizeof(struct dns_answer)+l),sizeof(struct in_addr));
+		memcpy((void*)&myip,(void*)&udp_pkt->buf+(sizeof(struct dns_answer)+strlen(udp_pkt->buf)+5),sizeof(struct in_addr));
 		memset(query_string,0,sizeof(query_string));
 		query_string=inet_ntoa(myip);
 		ip=(char*)malloc(strlen(query_string));
-		memcpy(ip,query_string,strlen(query_string));
+		memcpy(ip,query_string,strlen(query_string)*sizeof(char));
 		printf("ip: %s\n",ip);
 	}
 	return ret;

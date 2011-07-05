@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include"trie.c"
+#include"mydns.c"
 int main(){
 	init(20);
 	printf("here1\n");

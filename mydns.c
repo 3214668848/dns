@@ -28,7 +28,20 @@ int decode(struct udp_packet *udp_pkt,char* host,char* ip){
 	ip=0;
 	if(!ret){
 		struct in_addr myip;
-		memcpy((void*)&myip,(void*)&udp_pkt->buf+(sizeof(struct dns_answer)+strlen(udp_pkt->buf)+5),sizeof(struct in_addr));
+		struct dns_header header=udp_pkt->dns_hdr;
+		int k=htons(header.dns_no_answers)-1;
+		printf("k=%d\n",k+1);
+		if(k<0)
+			return -1;
+		int i=0;
+		int temp=strlen(udp_pkt->buf)+5;
+		struct dns_answer ans;
+		memcpy(&ans,udp_pkt->buf+temp,sizeof(ans));
+		for(;i<k;++i){
+			temp+=htons(ans.dns_data_len)+sizeof(ans);
+			memcpy(&ans,udp_pkt->buf+temp,sizeof(ans));
+		}
+		memcpy((void*)&myip,(void*)&udp_pkt->buf+temp+sizeof(ans),sizeof(struct in_addr));
 		memset(query_string,0,sizeof(query_string));
 		query_string=inet_ntoa(myip);
 		ip=(char*)malloc(strlen(query_string));

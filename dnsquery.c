@@ -39,5 +39,5 @@ void dns_query_package(struct udp_packet *udp_pkt,char* host,short int id){
 	int tt=(sizeof(struct dns_header)+strlen(name)+sizeof(temp)+1);
 	udp_pkt->len=tt;
 	udp_pkt->src_port=PORT;
-	//inet_aton("1.1.1.1",&udp_pkt->src_ip);
+	inet_aton("1.1.1.1",&udp_pkt->src_ip);
 }

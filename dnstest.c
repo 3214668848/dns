@@ -18,12 +18,14 @@ int main(){
     }
 	printf("bind success\n");
 	struct udp_packet *p=(struct udp_packet *)malloc(sizeof(struct udp_packet));
-	dns_query_package(p,"google.com\0",0);
+	dns_query_package(p,"www.sc.sdu.edu.cn\0",0);
    	int ret=sendto(sk,&p->dns_hdr,p->len,0,(struct sockaddr*)&dns_serv,sizeof(addr));
 	printf("send %d\n",ret);
+	memset(p,0,sizeof(struct udp_packet));
 	int size=sizeof(addr);
 	int recv_len=recvfrom(sk,&p->dns_hdr,sizeof(struct udp_packet),0,(struct sockaddr*)&addr,&size);
 	char *a1,*a2;
+	printf("%s %d\n",inet_ntoa(p->src_ip),p->src_port);
 	decode(p,a1,a2);
 	return 0;
 }

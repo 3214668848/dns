@@ -20,25 +20,15 @@ int main(){
 	struct udp_packet *p=(struct udp_packet *)malloc(sizeof(struct udp_packet));
 	//dns_query_package(p,"www.baidu.com\0",0);
 	int ret=0,i=0;
-	freopen("host_list_10000","r",stdin);
-	char c[100];
-	for(;i<5000;++i){
-		memset(c,0,sizeof(c));
-		gets(c);
-		dns_query_package(p,c,0);
-   		ret=sendto(sk,&p->dns_hdr,p->len,0,(struct sockaddr*)&dns_serv,sizeof(addr));
-		printf("i=%d send %d  -> %s\n",i,ret,c);
-	}
+	dns_query_package(p,"bbs.txt55.com\0",0);
+   	ret=sendto(sk,&p->dns_hdr,p->len,0,(struct sockaddr*)&dns_serv,sizeof(addr));
+	printf("send %d\n",ret);
 	memset(p,0,sizeof(struct udp_packet));
 	int size=sizeof(addr);
 	int rret=0;
-	for(i=0;i<5000;++i){
-//		rret=recvfrom(sk,&p->dns_hdr,sizeof(struct udp_packet),0,(struct sockaddr*)&addr,&size);
-		rret=recvfrom(sk,&p->dns_hdr,1024*1024,0,(struct sockaddr*)&addr,&size);
-		printf("%d\n",i);
-		char *a1,*a2;
-		printf("%s %d\n",inet_ntoa(p->src_ip),p->src_port);
-		decode(p,a1,a2);
-	}
+	rret=recvfrom(sk,&p->dns_hdr,sizeof(struct udp_packet),0,(struct sockaddr*)&addr,&size);
+	char *a1,*a2;
+	printf("%s %d\n",inet_ntoa(p->src_ip),p->src_port);
+	decode(p,a1,a2);
 	return 0;
 }

@@ -1,5 +1,5 @@
 #include<stdio.h>
-#include"trie.c"
+#include"hash.c"
 #include"mydns.c"
 #include"dnsquery.c"
 int main(){

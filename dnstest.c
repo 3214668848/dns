@@ -12,29 +12,31 @@ int main(){
     addr.sin_family=AF_INET;
     addr.sin_port=htons(53);
     addr.sin_addr.s_addr=htonl(INADDR_ANY);
-    if(bind(sk,(struct sockaddr *)&addr,sizeof(addr))<0){
-        printf("bind failed...\n");
-        return;
-    }
-	printf("bind success\n");
+  //  if(bind(sk,(struct sockaddr *)&addr,sizeof(addr))<0){
+ //       printf("bind failed...\n");
+  //      return;
+//    }
+	//printf("bind success\n");
 	struct udp_packet *p=(struct udp_packet *)malloc(sizeof(struct udp_packet));
 	//dns_query_package(p,"www.baidu.com\0",0);
 	int ret=0,i=0;
 	freopen("host_list_10000","r",stdin);
 	char c[100];
-	for(;i<5000;++i){
+	for(;i<10000;++i){
 		memset(c,0,sizeof(c));
 		gets(c);
 		dns_query_package(p,c,0);
+	int j=0;
+	for(;j<10;++j)
    		ret=sendto(sk,&p->dns_hdr,p->len,0,(struct sockaddr*)&dns_serv,sizeof(addr));
 		printf("i=%d send %d  -> %s\n",i,ret,c);
 	}
 	memset(p,0,sizeof(struct udp_packet));
 	int size=sizeof(addr);
 	int rret=0;
-	for(i=0;i<5000;++i){
+	for(i=0;i<100000;++i){
 //		rret=recvfrom(sk,&p->dns_hdr,sizeof(struct udp_packet),0,(struct sockaddr*)&addr,&size);
-		rret=recvfrom(sk,&p->dns_hdr,1024*1024,0,(struct sockaddr*)&addr,&size);
+		rret=recvfrom(sk,&p->dns_hdr,sizeof(struct udp_packet),0,(struct sockaddr*)&addr,&size);
 		printf("%d\n",i);
 		char *a1,*a2;
 		printf("%s %d\n",inet_ntoa(p->src_ip),p->src_port);

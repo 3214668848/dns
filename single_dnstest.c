@@ -12,15 +12,15 @@ int main(){
     addr.sin_family=AF_INET;
     addr.sin_port=htons(53);
     addr.sin_addr.s_addr=htonl(INADDR_ANY);
-    if(bind(sk,(struct sockaddr *)&addr,sizeof(addr))<0){
-        printf("bind failed...\n");
-        return;
-    }
+  //  if(bind(sk,(struct sockaddr *)&addr,sizeof(addr))<0){
+ //       printf("bind failed...\n");
+  //      return;
+ //   }
 	printf("bind success\n");
 	struct udp_packet *p=(struct udp_packet *)malloc(sizeof(struct udp_packet));
 	//dns_query_package(p,"www.baidu.com\0",0);
 	int ret=0,i=0;
-	dns_query_package(p,"bbs.txt55.com\0",0);
+	dns_query_package(p,"www.baidu.com\0",0);
    	ret=sendto(sk,&p->dns_hdr,p->len,0,(struct sockaddr*)&dns_serv,sizeof(addr));
 	printf("send %d\n",ret);
 	memset(p,0,sizeof(struct udp_packet));

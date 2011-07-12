@@ -1,4 +1,8 @@
 #include "dns.h"
+
+
+char baike[20];
+char hao123[20];
 int dns_is_query(struct udp_packet *udp_pkt){
 	return (!((udp_pkt->dns_hdr.dns_flags&0x8000)/0x8000));
 }
@@ -21,16 +25,16 @@ int decode(struct udp_packet *udp_pkt,char* host,char* ip){
 	char* query_string=(char*)malloc(BUF_SIZE*sizeof(char));
 	strcpy(query_string,udp_pkt->buf);
     decode_domain_name(query_string);
-    printf("query: %s\n",query_string);
+    //printf("query: %s\n",query_string);
 	int l=strlen(query_string);
 	host=(char*)malloc(l*sizeof(char));
 	memcpy(host,query_string,l*sizeof(char));
-	ip=0;
+	//ip=0;
 	if(!ret){
 		struct in_addr myip;
 		struct dns_header header=udp_pkt->dns_hdr;
 		int k=htons(header.dns_no_answers)-1;
-		printf("k=%d\n",k+1);
+		//printf("k=%d\n",k+1);
 		if(k<0)
 			return -1;
 		int i=0;
@@ -42,11 +46,11 @@ int decode(struct udp_packet *udp_pkt,char* host,char* ip){
 			memcpy(&ans,udp_pkt->buf+temp,sizeof(ans));
 		}
 		memcpy((void*)&myip,(void*)&udp_pkt->buf+temp+sizeof(ans),sizeof(struct in_addr));
-		memset(query_string,0,sizeof(query_string));
+        memset(query_string,0,sizeof(query_string));
 		query_string=inet_ntoa(myip);
-		ip=(char*)malloc(strlen(query_string));
+	  //ip=(char*)malloc(strlen(query_string));
 		memcpy(ip,query_string,strlen(query_string)*sizeof(char));
-		printf("ip: %s\n",ip);
+		//printf("ip: %s\n",ip);
 	}
 	return ret;
 }
@@ -66,7 +70,6 @@ int dns_set_flags(int err,struct udp_packet *udp_pkt){
 void code(struct udp_packet *udp_pkt,int mark,char* ip){
 	struct in_addr myip;
 	inet_aton(ip,&myip);
-	//inet_aton("1.1.1.1",&udp_pkt->src_ip);
 	if(mark){
 		
 	}else{

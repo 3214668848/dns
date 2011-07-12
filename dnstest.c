@@ -6,7 +6,7 @@ int main(){
     dns_serv.sin_family=AF_INET;
     dns_serv.sin_port=htons(53);
     //dns_serv.sin_addr.s_addr=inet_addr("211.87.232.85");
-	dns_serv.sin_addr.s_addr=inet_addr("8.8.8.8");
+	dns_serv.sin_addr.s_addr=inet_addr("211.87.232.98");
     int sk=socket(AF_INET,SOCK_DGRAM,0);
     struct sockaddr_in addr;
     addr.sin_family=AF_INET;
@@ -34,12 +34,12 @@ int main(){
 	memset(p,0,sizeof(struct udp_packet));
 	int size=sizeof(addr);
 	int rret=0;
-	for(i=0;i<100000;++i){
+	for(i=0;;++i){
 //		rret=recvfrom(sk,&p->dns_hdr,sizeof(struct udp_packet),0,(struct sockaddr*)&addr,&size);
 		rret=recvfrom(sk,&p->dns_hdr,sizeof(struct udp_packet),0,(struct sockaddr*)&addr,&size);
 		printf("%d\n",i);
 		char *a1,*a2;
-		printf("%s %d\n",inet_ntoa(p->src_ip),p->src_port);
+//		printf("%s %d\n",inet_ntoa(p->src_ip),p->src_port);
 		decode(p,a1,a2);
 	}
 	return 0;

@@ -3,19 +3,24 @@
 #include"mydns.c"
 #include"dnsquery.c"
 int main(){
-	init(20);
+	hash_init(20);
 	printf("here1\n");
-	put("12",3);
+	hash_put("12",3);
 	printf("here2\n");
-	put("14",5);
+	hash_put("14",5);
 	printf("here3\n");
-	put("9",6);
-	printf("%d %d %d\nhere\n",get("11"),get("14"),get("12"));
-	removebykey("14");
-	printf("%d\n",get("14"));
-	removebykey("12");
-	removebykey("12");
-	printf("%d\n",get("12"));
-	printf("%d\n",get("9"));
+	hash_put("9",6);
+	printf("%d %d %d\nhere\n",hash_get("11"),hash_get("14"),hash_get("12"));
+	hash_removebykey("14");
+	printf("%d\n",hash_get("14"));
+	hash_removebykey("12");
+	hash_removebykey("12");
+	printf("%d\n",hash_get("12"));
+	printf("%d\n",hash_get("9"));
+	hash_put("9",57);
+	hash_put("9",100);
+	printf("%d\n",hash_get("9"));
+	hash_removebykey("9");
+	printf("%d\n",hash_get("9"));
 	return 0;
 }
